@@ -1,0 +1,8 @@
+## Interface: 80000
+## Title: warmodeprint
+## Author: geheur
+## Version: 1.0
+## Notes: "'/warmodeprint', '/wmp', '/wmp party'."
+## DefaultState: Enabled
+
+main.lua
