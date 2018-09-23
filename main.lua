@@ -1,6 +1,32 @@
+local chattypes = {
+	"say",
+	"emote",
+	"yell",
+	"party",
+	"guild",
+	"officer",
+	"raid",
+	"raid_warning",
+	"instance_chat",
+	"battleground",
+}
+local chatshortcuts = {
+	instance="instance_chat",
+	i="instance_chat",
+	rw="raid_warning",
+	r="raid",
+	o="officer",
+	p="party",
+	s="say",
+	e="emote",
+	y="yell",
+	g="guild",
+	bg="battleground",
+}
+
 SLASH_WARMODEPRINT1 = "/warmodeprint"
 SLASH_WARMODEPRINT2 = "/wmp"
-SlashCmdList["WARMODEPRINT"] = function (msg)
+SlashCmdList["WARMODEPRINT"] = function (chatType)
 	local name, num
 	if IsInGroup(LE_PARTY_CATEGORY_HOME) then
 		name = "party"
@@ -52,6 +78,28 @@ SlashCmdList["WARMODEPRINT"] = function (msg)
 
 	print(makeString(warmodeColor, "War Mode"))
 	print(makeString(noWarmodeColor, "No War Mode"))
-	if msg:len() > 0 then SendChatMessage(makeString(warmode, "War Mode"), msg) end
-	if msg:len() > 0 then SendChatMessage(makeString(noWarmode, "No War Mode"), msg) end
+	if chatType:len() > 0 then
+		local originalChatType = chatType
+		chatType = chatType:lower()
+		for i,v in pairs(chatshortcuts) do
+			if chatType:lower() == i then
+				chatType = v
+				break
+			end
+		end
+		local found = false
+		for i,v in pairs(chattypes) do
+			if chatType:lower() == v then
+				found = true
+				break
+			end
+		end
+		if not found then
+			print('"'..originalChatType..'"', "is either not valid or not supported.")
+			return
+		end
+
+		SendChatMessage(makeString(warmode, "War Mode"), chatType)
+		SendChatMessage(makeString(noWarmode, "No War Mode"), chatType)
+	end
 end
