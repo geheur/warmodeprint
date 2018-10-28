@@ -44,7 +44,6 @@ SlashCmdList["WARMODEPRINT"] = function (chatType)
 		unitNameColor = "|c" .. RAID_CLASS_COLORS[unitClass].colorStr .. unitName .. "|r"
 		unitName = unitName
 		local warmodeactive = UnitIsWarModeDesired(str)
-		--print(unitName, UnitIsWarModeActive(str), UnitIsWarModePhased(str), UnitIsWarModeDesired(str), str)
 		if warmodeactive == true then
 			warmode[#warmode + 1] = unitName
 			warmodeColor[#warmodeColor + 1] = unitNameColor
