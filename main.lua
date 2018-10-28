@@ -27,14 +27,7 @@ local chatshortcuts = {
 SLASH_WARMODEPRINT1 = "/warmodeprint"
 SLASH_WARMODEPRINT2 = "/wmp"
 SlashCmdList["WARMODEPRINT"] = function (chatType)
-	local name, num
-	if IsInGroup(LE_PARTY_CATEGORY_HOME) then
-		name = "party"
-		num = 5
-	elseif IsInRaid() then
-		name = "raid"
-		num = 40
-	elseif not IsInGroup(LE_PARTY_CATEGORY_HOME) then
+	if not IsInGroup(LE_PARTY_CATEGORY_HOME) then
 		local enabled = UnitIsWarModeDesired("player") and "on" or "off"
 		print("Not in a group. Your war mode is " .. enabled .. ".")
 		return
@@ -61,11 +54,27 @@ SlashCmdList["WARMODEPRINT"] = function (chatType)
 		end
 	end
 		
-	for i=1,num do
-		local str = name .. i
-		addPlayer(str)
+	-- Thanks weakauras for this code :)
+	local function groupMembers()
+		local groupType = IsInRaid() and 'raid' or 'party'
+		local numGroupMembers = GetNumGroupMembers() - (groupType == "party" and 1 or 0)
+		local i = groupType == 'party' and 0 or 1
+		return function()
+			local unitId
+			if i == 0 then
+				unitId = 'player' -- in parties, the player cannot be queried with "partyn".
+			elseif i <= numGroupMembers then
+				unitId = groupType .. i
+			end
+			i = i + 1
+			return unitId
+		end
 	end
-	addPlayer("player")
+
+	for unitId in groupMembers() do
+		--print(unitId)
+		addPlayer(unitId)
+	end
 
 	local function makeString(list, startstr)
 		local str = startstr .. " (" .. #list .. "): "
