@@ -1,8 +1,10 @@
 ## Interface: 80000
 ## Title: warmodeprint
 ## Author: geheur
-## Version: 1.0
+## Version: @project-version@
 ## Notes: "'/warmodeprint', '/wmp', '/wmp party'."
 ## DefaultState: Enabled
+
+## X-Curse-Project-ID: 303529
 
 main.lua
